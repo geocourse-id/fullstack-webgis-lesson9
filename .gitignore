@@ -161,3 +161,5 @@ cython_debug/
 
 # CUSTOM SECRET
 bikini-bottom/project/secret.py
+bikini-bottom/assets/static/*
+bikini-bottom/assets/media/*
