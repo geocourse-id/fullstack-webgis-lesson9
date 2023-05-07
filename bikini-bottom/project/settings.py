@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'leaflet',
 
     # Custom Apps
+    'accounts',
     'tourism',
 ]
 

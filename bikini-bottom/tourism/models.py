@@ -356,7 +356,7 @@ class Profile(models.Model):
   phone = models.PositiveBigIntegerField()
   address = models.CharField(max_length=80)
   nationality = models.CharField(max_length=2, choices=NATIONALITY_CHOICES)
-  avatar = models.ImageField(upload_to='profile/avatar', default='patrick.png')
+  avatar = models.ImageField(upload_to='profile/avatar', default='patrick.png', help_text='If user not upload any photo, it will automatically assign with Patrick Star')
   user = models.OneToOneField(User, on_delete=models.CASCADE)
 
   # Metadata

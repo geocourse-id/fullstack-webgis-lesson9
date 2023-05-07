@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock title %}
+{% block head %}{% endblock head %}
+{% block body %}
+  <div class="container">
+    <h1>PROFILE PAGE</h1>
+
+    {% for account in profile %}
+      <div class="row">
+        
+        <div class="col-3">
+          <img src="{{account.avatar.url}}" alt="Avatar" style="width: 300px;">
+        </div>
+
+        <div class="col-9">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="col-1"></th>
+                <th class="col-3">Informasi</th>
+                <th class="col-8">Detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Nama</td>
+                <td>{{request.user.get_full_name}}</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Email</td>
+                <td>{{request.user.email}}</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Tanggal Lahir</td>
+                <td>{{account.birth_date}}</td>
+              </tr>
+              <tr>
+                <th scope="row">4</th>
+                <td>Nomor Telepon</td>
+                <td>{{account.phone}}</td>
+              </tr>
+              <tr>
+                <th scope="row">5</th>
+                <td>Alamat</td>
+                <td>{{account.address}}</td>
+              </tr>
+              <tr>
+                <th scope="row">6</th>
+                <td>Kewarganegaraan</td>
+                <td>{{account.nationality}}</td>
+              </tr>
+              <tr>
+                <th scope="row">7</th>
+                <td>Terakhir Login</td>
+                <td>{{request.user.last_login}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endfor %}
+
+    <div class="text-center">
+      {% if profile.count == 0 %}
+      <a href="{% url 'profile_add' %}" class="btn btn-primary">CREATE PROFILE</a>
+      {% else %}
+      <a href="{% url 'profile_update' request.user.id %}" class="btn btn-success">UPDATE PROFILE</a>
+      {% endif %}
+    </div>
+
+  </div>
+{% endblock body %}
