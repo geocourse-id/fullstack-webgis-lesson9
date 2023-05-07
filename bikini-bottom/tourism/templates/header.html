@@ -1,0 +1,42 @@
+<div class="container">
+  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+      <img src="/media/base/spongebob-logo.png" alt="Logo" style="height: 32;">
+      <span class="fs-4 ms-1">Bikini Bottom City</span>
+    </a>
+
+    {% if request.user.is_authenticated %}
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+      <li><a href="#" class="nav-link px-2 link-dark">Booking Facility</a></li>
+      <li><a href="#" class="nav-link px-2 link-dark">Propose Facility</a></li>
+      <li><a href="#" class="nav-link px-2 link-dark">Complaint</a></li>
+      <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
+      <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
+    </ul>
+    {% endif %}
+    
+    {% if request.user.is_authenticated %}
+    <div class="dropdown text-end">
+      <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+        <span>Welcome <i>{{request.user.get_full_name}}</i></span>
+        {% for item in profile %}
+        <img src="{{item.avatar.url}}" alt="avatar" width="32" height="32" class="rounded-circle">
+        {% endfor %}
+      </a>
+      <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+        <li><a class="dropdown-item" href="#">Profile</a></li>
+        <li><a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a></li>
+        <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
+      </ul>
+    </div>
+
+    {% else %}
+    <div class="col-md-3 text-end">
+      <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">Login</a>
+      <button type="button" class="btn btn-primary">Sign-up</button>
+    </div>
+    {% endif %}
+
+
+  </header>
+</div>

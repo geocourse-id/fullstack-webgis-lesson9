@@ -37,14 +37,14 @@ class Facility(models.Model):
   ]
 
   PRICE_UNIT_CHOICES = [
-    ('hour', 'Hourly'),
-    ('hour_3', 'Per 3 hours'),
-    ('hour_6', 'Per 6 hours'),
-    ('hour_12', 'Per 12 hours'),
-    ('day', 'Daily'),
-    ('week', 'Weekly'),
-    ('month', 'Monthly'),
-    ('year', 'Annual'),
+    ('hourly', 'Hourly'),
+    ('per 3 hours', 'Per 3 hours'),
+    ('per 6 hours', 'Per 6 hours'),
+    ('per 12 hours', 'Per 12 hours'),
+    ('daily', 'Daily'),
+    ('weekly', 'Weekly'),
+    ('monthly', 'Monthly'),
+    ('annual', 'Annual'),
   ]
 
   name = models.CharField(max_length=80)
@@ -52,7 +52,8 @@ class Facility(models.Model):
   status = models.CharField(max_length=12, choices=STATUS_CHOICES)
   location = models.PointField(spatial_index=True, srid=4326)
   price = models.DecimalField(max_digits=20, decimal_places=2)
-  price_unit = models.CharField(max_length=10, choices=PRICE_UNIT_CHOICES)
+  price_unit = models.CharField(max_length=12, choices=PRICE_UNIT_CHOICES)
+  photo = models.ImageField(upload_to='facility/photo')
   operator = models.ForeignKey(User, on_delete=models.CASCADE)
   
   # Metadata

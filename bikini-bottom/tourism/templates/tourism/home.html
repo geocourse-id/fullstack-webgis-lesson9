@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load leaflet_tags %}
+
+{% block title %}Test{% endblock title %}
+
+{% block head %}
+  {% leaflet_js %}
+  {% leaflet_css %}
+
+  <style>
+    .leaflet-container {
+      width:  100%;
+      height: 80vh;
+    }
+  </style>
+{% endblock head %}
+
+{% block body %}
+  <script src="{% static 'leaflet/leaflet.ajax.js' %}"></script>
+  
+  <div class="container">
+    <h2>Find your best experiences in Bikini Bottom</h2>
+  </div>
+  
+  {% leaflet_map "map" callback="window.map_init" %}
+
+
+  <script>
+    function map_init (map, options) { 
+      const facility = L.geoJSON.ajax("{% url 'geo_facility' %}", {
+        onEachFeature: function (feature, layer) {
+          layer.bindPopup(
+            `
+              <a href=''><h4>${feature.properties.name}</h4></a>
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>Type</td>
+                    <td>${feature.properties.types}</td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td>${feature.properties.status}</td>
+                  </tr>
+                  <tr>
+                    <td>Price</td>
+                    <td>${feature.properties.price}</td>
+                  </tr>
+                  <tr>
+                    <td>Price Unit</td>
+                    <td>${feature.properties.price_unit}</td>
+                  </tr>
+                  <tr>
+                    <td>Photo</td>
+                    <td><img src='/media/${feature.properties.photo}' style='width: 100px;' ></td>
+                  </tr>
+                </tbody>
+              </table>
+            `
+          );
+        }
+      });
+
+      const infrastructure = L.geoJSON.ajax("{% url 'geo_infrastructure' %}", {
+        onEachFeature: function(feature, layer){
+          layer.bindPopup(
+            `
+              <a href=''><h4>${feature.properties.name}</h4></a>
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>Type</td>
+                    <td>${feature.properties.types}</td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td>${feature.properties.status}</td>
+                  </tr>
+                </tbody>
+              </table>
+            `
+          )
+        }
+      });
+
+      const district = L.geoJSON.ajax("{% url 'geo_district' %}", {
+        onEachFeature: function(feature, layer){
+          layer.bindPopup(
+            `
+              <a href=''><h4>${feature.properties.name}</h4></a>
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>Type</td>
+                    <td>${feature.properties.code}</td>
+                  </tr>
+                </tbody>
+              </table>
+            `
+          )
+        }
+      });
+
+      // Add feature to web map
+      facility.addTo(map);
+      infrastructure.addTo(map);
+      district.addTo(map);
+
+      // Grouping Layer Overlay
+      const controlLayers = map.layerscontrol;
+      controlLayers.addOverlay(facility, 'Facility')
+      controlLayers.addOverlay(infrastructure, 'Infrastructure')
+      controlLayers.addOverlay(district, 'District')
+
+    };
+  </script>
+
+{% endblock body %}
