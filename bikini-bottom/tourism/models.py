@@ -30,10 +30,11 @@ class Facility(models.Model):
 
   STATUS_CHOICES = [
     ('proposed', 'Proposed'),
+    ('under review', 'Under Review'),
     ('planned', 'Planned'),
+    ('cancelled', 'Cancelled'),
     ('constructing', 'Under Construction'),
-    ('open', 'Service is open'),
-    ('close', 'Service is closed'),
+    ('complete', 'Completed'),
   ]
 
   PRICE_UNIT_CHOICES = [
@@ -49,7 +50,8 @@ class Facility(models.Model):
 
   name = models.CharField(max_length=80)
   types = models.CharField(max_length=10, choices=TYPES_CHOICES)
-  status = models.CharField(max_length=12, choices=STATUS_CHOICES)
+  status = models.CharField(max_length=12, choices=STATUS_CHOICES, default='proposed')
+  open = models.BooleanField(default=False)
   location = models.PointField(spatial_index=True, srid=4326)
   price = models.DecimalField(max_digits=20, decimal_places=2)
   price_unit = models.CharField(max_length=12, choices=PRICE_UNIT_CHOICES)
@@ -65,9 +67,9 @@ class Facility(models.Model):
 
 class Booking(models.Model):
   PAYMENT_METHOD_CHOICES = [
-    ('cash', 'Cash'),
-    ('transfer', 'Bank Transfer'),
-    ('e_wallet', 'Electronic Wallet'),
+    ('Cash', 'Cash'),
+    ('Bank Transfer', 'Bank Transfer'),
+    ('Electronic Wallet', 'Electronic Wallet'),
   ]
 
   PAYMENT_STATUS_CHOICES = [
@@ -78,8 +80,8 @@ class Booking(models.Model):
   facility = models.ForeignKey(Facility, on_delete=models.CASCADE)
   start_visit = models.DateTimeField()
   end_visit = models.DateTimeField()
-  payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES)
-  payment_status = models.CharField(max_length=10, choices=PAYMENT_STATUS_CHOICES)
+  payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES)
+  payment_status = models.CharField(max_length=10, choices=PAYMENT_STATUS_CHOICES, default='unpaid')
   user = models.ForeignKey(User, on_delete=models.CASCADE)
 
   # Metadata

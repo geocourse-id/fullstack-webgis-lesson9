@@ -2,13 +2,24 @@ from django.urls import path
 from tourism import views
 
 urlpatterns = [
-  # PAGE
+  # HOME PAGE
   path('', views.HomeView, name='home'),
+  
+  # PROFILE PAGE
   path('profile/', views.ProfileView, name='profile'),
   path('profile/add/', views.ProfileAddView, name='profile_add'),
   path('profile/update/<int:pk>/', views.ProfileUpdateView, name='profile_update'),
 
-  # API
+  # BOOKING PAGE
+  path('booking/', views.BookingView, name='booking'),
+  path('booking/add/', views.BookingAddView, name='booking_add'),
+
+  # FACILITY PAGE
+  path('facility/', views.FacilityView, name='facility'),
+  path('facility/propose/', views.FacilityProposeView, name='facility_propose'),
+  path('facility/<int:pk>/', views.FacilityChangeView, name='facility_change'),
+
+  # GEOAPI
   path('geo-facility/', views.FacilityGeoView, name='geo_facility'),
   path('geo-infrastructure/', views.LineInfrastructureGeoView, name='geo_infrastructure'),
   path('geo-district/', views.DistrictGeoView, name='geo_district'),

@@ -6,7 +6,11 @@ class LocationAdmin(admin.OSMGeoAdmin):
   default_lon = 18409015.29
   default_lat = 1300740.59
 
-admin.site.register(Facility, LocationAdmin)
+@admin.register(Facility)
+class FacilityAdmin(admin.OSMGeoAdmin):
+  list_filter = ['name', 'status']
+  list_display = ['id', 'name', 'status']
+
 admin.site.register(Booking)
 admin.site.register(Review)
 admin.site.register(Profile)

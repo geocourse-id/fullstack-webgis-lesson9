@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% load leaflet_tags %}
 
-{% block title %}Test{% endblock title %}
-
+{% block title %}Book a facility{% endblock title %}
 {% block head %}
   {% leaflet_js %}
   {% leaflet_css %}
@@ -15,27 +15,48 @@
     }
   </style>
 {% endblock head %}
-
 {% block body %}
-  <script src="{% static 'leaflet/leaflet.ajax.js' %}"></script>
-  
   <div class="container">
-    <h2>Find your <span style="color: green; font-weight: bolder;">best experiences</span> in <span style="color: blue; font-weight: bolder;">Bikini Bottom</span>🏖️</h2>
+    {% if profile.count == 0 %}
+    <h1>Please complete your account profile to book our facility</h1>
+    <a href="{% url 'profile' %}" class="btn btn-primary">Complete your profile</a>
+
+    {% else %}
+    <h1>BOOK YOUR FACILITY</h1>
+
+    <div class="row">
+
+      <div class="col-8">
+        {% leaflet_map "map" callback="window.map_init" %}
+      </div>
+
+      <div class="col-4">
+        <form action="" method="post">
+          {% csrf_token %}
+          {{form | crispy}}
+          <button id="chosen-facility" name="chosen-facility" type="submit" value="" class="btn btn-outline-primary">SUBMIT</button>
+        </form>
+      </div>
+
+    </div>
+    {% endif %}
   </div>
-  
-  {% leaflet_map "map" callback="window.map_init" %}
 
-
+  <script src="{% static 'leaflet/leaflet.ajax.js' %}"></script>
   <script>
+    // MAP VIEW
     function map_init (map, options) { 
       const facility = L.geoJSON.ajax("{% url 'geo_facility' %}", {
         onEachFeature: function (feature, layer) {
-          let open
-          feature.properties.open ? open = '✅' : open = '⛔'
+          layer.on('click', function(){
+            const facilityId = feature.id;
+            document.getElementById('id_facility').value = facilityId
+            document.getElementById('chosen-facility').value = facilityId
+          })
 
           layer.bindPopup(
             `
-              <h4>${feature.properties.name}</h4>
+              <a href=''><h4>${feature.properties.name}</h4></a>
               <table class="table">
                 <tbody>
                   <tr>
@@ -43,8 +64,8 @@
                     <td>${feature.properties.types}</td>
                   </tr>
                   <tr>
-                    <td>Open</td>
-                    <td>${open}</td>
+                    <td>Status</td>
+                    <td>${feature.properties.status}</td>
                   </tr>
                   <tr>
                     <td>Price</td>
@@ -117,6 +138,14 @@
       controlLayers.addOverlay(district, 'District')
 
     };
-  </script>
 
+    // CHANGE FORM TYPE TO DATE AND TIME
+    const startVisit = document.querySelectorAll('#div_id_start_visit > p > input');
+    startVisit[0].setAttribute('type', 'date')
+    startVisit[1].setAttribute('type', 'time')
+
+    const endVisit = document.querySelectorAll('#div_id_end_visit > p > input');
+    endVisit[0].setAttribute('type', 'date')
+    endVisit[1].setAttribute('type', 'time')
+  </script>
 {% endblock body %}

@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load leaflet_tags %}
 
-{% block title %}Update Profile{% endblock title %}
-{% block head %}{% endblock head %}
+{% block title %}Propose facility{% endblock title %}
+{% block head %}
+  {% leaflet_js plugins="forms" %}
+  {% leaflet_css plugins="forms" %}
+{% endblock head %}
 {% block body %}
   <div class="container">
-    {% if form.user.value == request.user.id %}
-    <h1>UPDATE YOUR PROFILE</h1>
+    {% if form.operator.value == request.user.id and form.status.value == 'complete' %}
+    <h1>CHANGE YOUR FACILITY STATUS</h1>
     <form action="" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       {{form | crispy}}
