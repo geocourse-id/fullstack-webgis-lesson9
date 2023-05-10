@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, Booking, Facility
+from .models import Profile, Booking, Facility, Complaint
 from django.contrib.admin import widgets
 from leaflet.forms.widgets import LeafletWidget
 
@@ -63,4 +63,19 @@ class FacilityChangeForm(forms.ModelForm):
     widgets = {
       'status': forms.TextInput(attrs={'disabled': True}),
       'operator': forms.TextInput(attrs={'hidden': True})
+    }
+
+class InfrastructureComplaintForm(forms.ModelForm):
+  class Meta:
+    model = Complaint
+    fields = [
+      'infrastructure',
+      'types',
+      'specific_location',
+      'proof_image',
+      'comment'
+    ]
+
+    widgets = {
+      'specific_location': forms.TextInput(attrs={'disabled': True}),
     }

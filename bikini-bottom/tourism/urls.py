@@ -19,8 +19,13 @@ urlpatterns = [
   path('facility/propose/', views.FacilityProposeView, name='facility_propose'),
   path('facility/<int:pk>/', views.FacilityChangeView, name='facility_change'),
 
+  # INFRASTRUCTURE PAGE
+  path('infrastructure/', views.InfrastructureView, name='infrastructure'),
+  path('infrastructure/complaint/', views.InfrastructureComplaintView, name='infrastructure_complaint'),
+
   # GEOAPI
   path('geo-facility/', views.FacilityGeoView, name='geo_facility'),
   path('geo-infrastructure/', views.LineInfrastructureGeoView, name='geo_infrastructure'),
   path('geo-district/', views.DistrictGeoView, name='geo_district'),
+  path('geo-complaint/', views.ComplaintGeoView, name='geo_complaint'),
 ]

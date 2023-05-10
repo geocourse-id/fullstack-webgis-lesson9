@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Proposed List{% endblock title %}
+{% block title %}Facility List{% endblock title %}
 {% block head %}{% endblock head %}
 {% block body %}
   <div class="container">
@@ -27,7 +27,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for item in propose %}
+        {% for item in facility %}
         <tr>
           <th scope="row">{{forloop.counter}}</th>
           <td>

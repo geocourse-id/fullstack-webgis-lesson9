@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.gis.geos import GEOSGeometry
 
 # Create your models here.
 class Facility(models.Model):
@@ -385,10 +386,11 @@ class LineInfrastructure(models.Model):
 
   STATUS_CHOICES = [
     ('proposed', 'Proposed'),
+    ('under review', 'Under Review'),
     ('planned', 'Planned'),
+    ('cancelled', 'Cancelled'),
     ('constructing', 'Under Construction'),
-    ('open', 'Service is open'),
-    ('close', 'Service is closed'),
+    ('complete', 'Completed'),
   ]
 
   name = models.CharField(max_length=80)
@@ -421,9 +423,9 @@ class Complaint(models.Model):
 
   infrastructure = models.ForeignKey(LineInfrastructure, on_delete=models.CASCADE)
   types = models.CharField(max_length=12, choices=TYPES_CHOICES)
-  specific_location = models.PointField(spatial_index=True, srid=4326)
+  specific_location = models.PointField(spatial_index=True, srid=4326, blank=True)
   proof_image = models.ImageField(upload_to='complaint')
-  status_handling = models.CharField(max_length=10, choices=STATUS_HANDLING_CHOICES)
+  status_handling = models.CharField(max_length=10, choices=STATUS_HANDLING_CHOICES, default='received')
   comment = models.TextField()
   response = models.TextField(null=True, blank=True)
   user = models.ForeignKey(User, on_delete=models.CASCADE)

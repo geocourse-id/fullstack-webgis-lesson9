@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.serializers import serialize
 from django.http import HttpResponse
-from .models import Facility, LineInfrastructure, District, Profile, Booking
-from .forms import ProfileForm, BookingForm, FacilityProposeForm, FacilityChangeForm
+from .models import Facility, LineInfrastructure, District, Profile, Booking, Complaint
+from .forms import ProfileForm, BookingForm, FacilityProposeForm, FacilityChangeForm, InfrastructureComplaintForm
 
 def HomeView(request):
   return render(request, 'tourism/home.html')
@@ -65,9 +65,9 @@ def BookingAddView(request):
 
 def FacilityView(request):
   context = {
-    'propose': Facility.objects.filter(operator=request.user)
+    'facility': Facility.objects.filter(operator=request.user)
   }
-  return render(request, 'tourism/propose.html', context)
+  return render(request, 'tourism/facility.html', context)
 
 def FacilityProposeView(request):
   if request.method == 'POST':
@@ -76,10 +76,10 @@ def FacilityProposeView(request):
       item = form.save(commit=False)
       item.operator = request.user
       item.save()
-      return redirect('propose')
+      return redirect('facility')
   else:
     form = FacilityProposeForm()
-  return render(request, 'tourism/propose_add.html', {'form': form})
+  return render(request, 'tourism/facility_propose.html', {'form': form})
 
 def FacilityChangeView(request, pk):
   item = get_object_or_404(Facility, pk=pk)
@@ -88,5 +88,28 @@ def FacilityChangeView(request, pk):
     if form.is_valid():
       item.operator = request.user
       form.save()
-      return redirect('propose')
-  return render(request, 'tourism/propose_change.html', {'form': form})
+      return redirect('facility')
+  return render(request, 'tourism/facility_change.html', {'form': form})
+
+def InfrastructureView(request):
+  context = {
+    'complaint': Complaint.objects.filter(user=request.user)
+  }
+  return render(request, 'tourism/infrastructure.html', context)
+
+def ComplaintGeoView(request):
+  place = serialize('geojson', Complaint.objects.filter(user=request.user))
+  return HttpResponse(place, content_type='json')
+
+def InfrastructureComplaintView(request):
+  if request.method == 'POST':
+    form = InfrastructureComplaintForm(request.POST, request.FILES)
+    if form.is_valid():
+      item = form.save(commit=False)
+      item.specific_location = request.POST.get('chosen_location')
+      item.user = request.user
+      item.save()
+      return redirect('infrastructure')
+  else:
+    form = InfrastructureComplaintForm()
+  return render(request, 'tourism/infrastructure_complaint.html', {'form': form})

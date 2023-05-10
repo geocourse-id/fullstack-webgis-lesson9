@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load leaflet_tags %}
+{% load static %}
+
+{% block title %}Complaint infrastructure{% endblock title %}
+{% block head %}
+  {% leaflet_js plugins="forms" %}
+  {% leaflet_css plugins="forms" %}
+
+  <style>
+    .leaflet-container {
+      width:  100%;
+      height: 90vh;
+    }
+  </style>
+{% endblock head %}
+{% block body %}
+  <script src="{% static 'leaflet/leaflet.ajax.js' %}"></script>
+
+  <div class="container">
+    <h1>COMPLAINT PUBLIC INFRASTRUCTURE HERE</h1>
+    <div class="row">
+      <div class="col-8">
+        {% leaflet_map "map" callback="window.map_init" %}
+      </div>
+      
+      <div class="col-3">
+        <form action="" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{form | crispy}}
+          <button type="submit" id="chosen_location" name="chosen_location" value="" class="btn btn-outline-primary">SUBMIT</button>
+        </form>
+      </div>
+
+    </div>
+
+    <script>
+      function map_init (map, options) {
+        const infrastructure = L.geoJSON.ajax("{% url 'geo_infrastructure' %}", {
+          onEachFeature: function (feature, layer) {
+            layer.on('click', function(){
+              const infrastructureId = feature.id;
+              document.getElementById('id_infrastructure').value = infrastructureId
+            })
+
+            layer.bindPopup(feature.properties.name)
+          }
+        });
+
+        marker = L.marker([11.60, 165.39], {draggable:'true'});
+        marker.on('dragend', function(){
+          const longitude =  marker.getLatLng().lng
+          const latitude = marker.getLatLng().lat
+          document.getElementById('chosen_location').value = `POINT(${longitude} ${latitude})`
+          document.getElementById('id_specific_location').value = `POINT(${longitude} ${latitude})`
+          map.closePopup()
+        })
+
+        // MAP VIEW
+        infrastructure.addTo(map);
+        marker.addTo(map);
+      }
+    </script>
+  </div>
+{% endblock body %}
