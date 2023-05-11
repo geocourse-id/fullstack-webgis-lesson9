@@ -19,6 +19,12 @@
   <script src="{% static 'leaflet/leaflet.ajax.js' %}"></script>
 
   <div class="container">
+    {% if profile.count == 0 %}
+    <h1>Please complete your account profile to report our public infrastructures</h1>
+    <a href="{% url 'profile' %}" class="btn btn-primary">Complete your profile</a>
+      
+    {% else %}
+
     <h1>COMPLAINT PUBLIC INFRASTRUCTURE HERE</h1>
     <div class="row">
       <div class="col-8">
@@ -32,35 +38,36 @@
           <button type="submit" id="chosen_location" name="chosen_location" value="" class="btn btn-outline-primary">SUBMIT</button>
         </form>
       </div>
-
     </div>
 
-    <script>
-      function map_init (map, options) {
-        const infrastructure = L.geoJSON.ajax("{% url 'geo_infrastructure' %}", {
-          onEachFeature: function (feature, layer) {
-            layer.on('click', function(){
-              const infrastructureId = feature.id;
-              document.getElementById('id_infrastructure').value = infrastructureId
-            })
-
-            layer.bindPopup(feature.properties.name)
-          }
-        });
-
-        marker = L.marker([11.60, 165.39], {draggable:'true'});
-        marker.on('dragend', function(){
-          const longitude =  marker.getLatLng().lng
-          const latitude = marker.getLatLng().lat
-          document.getElementById('chosen_location').value = `POINT(${longitude} ${latitude})`
-          document.getElementById('id_specific_location').value = `POINT(${longitude} ${latitude})`
-          map.closePopup()
-        })
-
-        // MAP VIEW
-        infrastructure.addTo(map);
-        marker.addTo(map);
-      }
-    </script>
+    {% endif %}
   </div>
+
+  <script>
+    function map_init (map, options) {
+      const infrastructure = L.geoJSON.ajax("{% url 'geo_infrastructure' %}", {
+        onEachFeature: function (feature, layer) {
+          layer.on('click', function(){
+            const infrastructureId = feature.id;
+            document.getElementById('id_infrastructure').value = infrastructureId
+          })
+
+          layer.bindPopup(feature.properties.name)
+        }
+      });
+
+      marker = L.marker([11.60, 165.39], {draggable:'true'});
+      marker.on('dragend', function(){
+        const longitude =  marker.getLatLng().lng
+        const latitude = marker.getLatLng().lat
+        document.getElementById('chosen_location').value = `POINT(${longitude} ${latitude})`
+        document.getElementById('id_specific_location').value = `POINT(${longitude} ${latitude})`
+        map.closePopup()
+      })
+
+      // MAP VIEW
+      infrastructure.addTo(map);
+      marker.addTo(map);
+    }
+  </script>
 {% endblock body %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, Booking, Facility, Complaint
+from .models import Profile, Booking, Facility, Complaint, Review
 from django.contrib.admin import widgets
 from leaflet.forms.widgets import LeafletWidget
 
@@ -61,7 +61,7 @@ class FacilityChangeForm(forms.ModelForm):
     fields = ['name', 'open', 'price', 'price_unit', 'photo', 'status', 'operator']
 
     widgets = {
-      'status': forms.TextInput(attrs={'disabled': True}),
+      'status': forms.TextInput(attrs={'readonly': True}),
       'operator': forms.TextInput(attrs={'hidden': True})
     }
 
@@ -77,5 +77,22 @@ class InfrastructureComplaintForm(forms.ModelForm):
     ]
 
     widgets = {
-      'specific_location': forms.TextInput(attrs={'disabled': True}),
+      'specific_location': forms.TextInput(attrs={'readonly': True}),
     }
+
+class ReviewForm(forms.ModelForm):
+  class Meta:
+    model = Review
+    fields = [
+      'booking',
+      'score',
+      'comment',
+    ]
+
+    widgets = {
+      'booking': forms.TextInput(attrs={'readonly': True}),
+    }
+
+  def __init__(self, *args, **kwargs):
+    super(ReviewForm, self).__init__(*args, **kwargs)
+    self.fields['booking'].label = 'Booking ID'

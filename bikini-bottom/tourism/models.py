@@ -1,7 +1,6 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.contrib.gis.geos import GEOSGeometry
 
 # Create your models here.
 class Facility(models.Model):
@@ -96,7 +95,6 @@ class Review(models.Model):
   booking = models.OneToOneField(Booking, on_delete=models.CASCADE)
   score = models.IntegerField(validators=[MaxValueValidator(10), MinValueValidator(0)])
   comment = models.TextField(null=True, blank=True)
-  is_recommended = models.BooleanField(default=True)
   user = models.ForeignKey(User, on_delete=models.CASCADE)
 
   # Metadata
@@ -423,7 +421,7 @@ class Complaint(models.Model):
 
   infrastructure = models.ForeignKey(LineInfrastructure, on_delete=models.CASCADE)
   types = models.CharField(max_length=12, choices=TYPES_CHOICES)
-  specific_location = models.PointField(spatial_index=True, srid=4326, blank=True)
+  specific_location = models.PointField(spatial_index=True, srid=4326)
   proof_image = models.ImageField(upload_to='complaint')
   status_handling = models.CharField(max_length=10, choices=STATUS_HANDLING_CHOICES, default='received')
   comment = models.TextField()

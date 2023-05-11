@@ -21,6 +21,9 @@
   
   <div class="container">
     <h2>Find your <span style="color: green; font-weight: bolder;">best experiences</span> in <span style="color: blue; font-weight: bolder;">Bikini Bottom</span>🏖️</h2>
+    {% for item in data %}
+    <div id="data-{{item.booking__facility}}" score="{{item.avg_score}}"></div>
+    {% endfor %}
   </div>
   
   {% leaflet_map "map" callback="window.map_init" %}
@@ -32,6 +35,10 @@
         onEachFeature: function (feature, layer) {
           let open
           feature.properties.open ? open = '✅' : open = '⛔'
+
+          const data = document.getElementById(`data-${feature.id}`)
+          let scoreReview
+          data !== null ? scoreReview = Number(data.getAttribute('score')).toFixed(2) : scoreReview = 'No review'
 
           layer.bindPopup(
             `
@@ -57,6 +64,10 @@
                   <tr>
                     <td>Photo</td>
                     <td><img src='/media/${feature.properties.photo}' style='width: 100px;' ></td>
+                  </tr>
+                  <tr>
+                    <td>Rating</td>
+                    <td>${scoreReview}</td>
                   </tr>
                 </tbody>
               </table>

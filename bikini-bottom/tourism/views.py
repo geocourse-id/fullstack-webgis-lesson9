@@ -1,11 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.serializers import serialize
 from django.http import HttpResponse
-from .models import Facility, LineInfrastructure, District, Profile, Booking, Complaint
-from .forms import ProfileForm, BookingForm, FacilityProposeForm, FacilityChangeForm, InfrastructureComplaintForm
+from .models import Facility, LineInfrastructure, District, Profile, Booking, Complaint, Review
+from .forms import ProfileForm, BookingForm, FacilityProposeForm, FacilityChangeForm, InfrastructureComplaintForm, ReviewForm
+from django.db.models import Avg
 
 def HomeView(request):
-  return render(request, 'tourism/home.html')
+  context = {
+    'data': Review.objects.select_related('booking').values('booking__facility').annotate(avg_score=Avg('score'))
+  }
+  return render(request, 'tourism/home.html', context)
 
 def FacilityGeoView(request):
   place = serialize('geojson', Facility.objects.all())
@@ -45,8 +49,19 @@ def ProfileUpdateView(request, pk):
   return render(request, 'tourism/profile_update.html', {'form': form})
 
 def BookingView(request):
+  if request.method == 'POST':
+    form = ReviewForm(request.POST)
+    if form.is_valid():
+      item = form.save(commit=False)
+      item.user = request.user
+      item.save()
+      return redirect('booking')
+  else:
+    form = ReviewForm()
+
   context = {
-    'booking': Booking.objects.filter(user=request.user)
+    'booking': Booking.objects.filter(user=request.user).select_related('review'),
+    'form': form
   }
   return render(request, 'tourism/booking.html', context)
 
@@ -55,7 +70,6 @@ def BookingAddView(request):
     form = BookingForm(request.POST)
     if form.is_valid():
       item = form.save(commit=False)
-      item.facility_id = request.POST.get('chosen-facility')
       item.user = request.user
       item.save()
       return redirect('booking')
@@ -106,7 +120,6 @@ def InfrastructureComplaintView(request):
     form = InfrastructureComplaintForm(request.POST, request.FILES)
     if form.is_valid():
       item = form.save(commit=False)
-      item.specific_location = request.POST.get('chosen_location')
       item.user = request.user
       item.save()
       return redirect('infrastructure')
