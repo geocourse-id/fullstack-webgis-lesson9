@@ -23,6 +23,9 @@ urlpatterns = [
   path('infrastructure/', views.InfrastructureView, name='infrastructure'),
   path('infrastructure/complaint/', views.InfrastructureComplaintView, name='infrastructure_complaint'),
 
+  # ABOUT PAGE
+  path('about/', views.AboutView, name='about'),
+
   # GEOAPI
   path('geo-facility/', views.FacilityGeoView, name='geo_facility'),
   path('geo-infrastructure/', views.LineInfrastructureGeoView, name='geo_infrastructure'),

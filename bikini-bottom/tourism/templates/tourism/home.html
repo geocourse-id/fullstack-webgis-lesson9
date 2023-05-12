@@ -22,7 +22,7 @@
   <div class="container">
     <h2>Find your <span style="color: green; font-weight: bolder;">best experiences</span> in <span style="color: blue; font-weight: bolder;">Bikini Bottom</span>🏖️</h2>
     {% for item in data %}
-    <div id="data-{{item.booking__facility}}" score="{{item.avg_score}}"></div>
+    <div id="data-{{item.booking__facility}}" score="{{item.avg_score}}" count="{{item.count_review}}"></div>
     {% endfor %}
   </div>
   
@@ -38,7 +38,9 @@
 
           const data = document.getElementById(`data-${feature.id}`)
           let scoreReview
+          let countReview
           data !== null ? scoreReview = Number(data.getAttribute('score')).toFixed(2) : scoreReview = 'No review'
+          data !== null ? countReview = Number(data.getAttribute('count')) : countReview = 'No review'
 
           layer.bindPopup(
             `
@@ -68,6 +70,10 @@
                   <tr>
                     <td>Rating</td>
                     <td>${scoreReview}</td>
+                  </tr>
+                  <tr>
+                    <td>Reviews</td>
+                    <td>${countReview}</td>
                   </tr>
                 </tbody>
               </table>

@@ -28,6 +28,10 @@
 
       <div class="col-8">
         {% leaflet_map "map" callback="window.map_init" %}
+        
+        {% for item in data %}
+          <div id="data-{{item.booking__facility}}" score="{{item.avg_score}}" count="{{item.count_review}}"></div>
+        {% endfor %}
       </div>
 
       <div class="col-4">
@@ -54,9 +58,15 @@
             document.getElementById('chosen-facility').value = facilityId
           })
 
+          const data = document.getElementById(`data-${feature.id}`)
+          let scoreReview
+          let countReview
+          data !== null ? scoreReview = Number(data.getAttribute('score')).toFixed(2) : scoreReview = 'No review'
+          data !== null ? countReview = Number(data.getAttribute('count')) : countReview = 'No review'
+
           layer.bindPopup(
             `
-              <a href=''><h4>${feature.properties.name}</h4></a>
+              <h4>${feature.properties.name}</h4>
               <table class="table">
                 <tbody>
                   <tr>
@@ -78,6 +88,14 @@
                   <tr>
                     <td>Photo</td>
                     <td><img src='/media/${feature.properties.photo}' style='width: 100px;' ></td>
+                  </tr>
+                  <tr>
+                    <td>Rating</td>
+                    <td>${scoreReview}</td>
+                  </tr>
+                  <tr>
+                    <td>Reviews</td>
+                    <td>${countReview}</td>
                   </tr>
                 </tbody>
               </table>

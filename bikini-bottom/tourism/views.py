@@ -3,11 +3,11 @@ from django.core.serializers import serialize
 from django.http import HttpResponse
 from .models import Facility, LineInfrastructure, District, Profile, Booking, Complaint, Review
 from .forms import ProfileForm, BookingForm, FacilityProposeForm, FacilityChangeForm, InfrastructureComplaintForm, ReviewForm
-from django.db.models import Avg
+from django.db.models import Avg, Count
 
 def HomeView(request):
   context = {
-    'data': Review.objects.select_related('booking').values('booking__facility').annotate(avg_score=Avg('score'))
+    'data': Review.objects.select_related('booking').values('booking__facility').annotate(avg_score=Avg('score'), count_review=Count('score'))
   }
   return render(request, 'tourism/home.html', context)
 
@@ -75,7 +75,9 @@ def BookingAddView(request):
       return redirect('booking')
   else:
     form = BookingForm()
-  return render(request, 'tourism/booking_add.html', {'form': form})
+  
+  data =  Review.objects.select_related('booking').values('booking__facility').annotate(avg_score=Avg('score'), count_review=Count('score'))
+  return render(request, 'tourism/booking_add.html', {'form': form, 'data': data})
 
 def FacilityView(request):
   context = {
@@ -126,3 +128,6 @@ def InfrastructureComplaintView(request):
   else:
     form = InfrastructureComplaintForm()
   return render(request, 'tourism/infrastructure_complaint.html', {'form': form})
+
+def AboutView(request):
+  return render(request, 'tourism/about.html')
