@@ -12,6 +12,10 @@
       <li><a href="{% url 'infrastructure' %}" class="nav-link px-2 link-dark">Public Infrastructure</a></li>
       <li><a href="{% url 'about' %}" class="nav-link px-2 link-dark">About</a></li>
     </ul>
+    {% else %}
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+      <li><i class="nav-link link-dark">Welcome to <a href="{% url 'about' %}" class="badge bg-info nav-link link-light">Bikini Bottom</a> Tourism Website</i></li>
+    </ul>
     {% endif %}
     
     {% if request.user.is_authenticated %}
