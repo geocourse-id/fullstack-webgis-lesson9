@@ -5,17 +5,15 @@
 {% block head %}{% endblock head %}
 {% block body %}
   <div class="container">
-    {% for item in profile %}
-      {% if item.user == request.user %}
-      <h1>UPDATE YOUR PROFILE</h1>
-      <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{form | crispy}}
-        <button type="submit" class="btn btn-outline-primary">SUBMIT</button>
-      </form>
-      {% else %}
-      <h1>You are not permitted ⛔</h1>
-      {% endif %}
-    {% endfor %}
+    {% if page.user == request.user %}
+    <h1>UPDATE YOUR PROFILE</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{form | crispy}}
+      <button type="submit" class="btn btn-outline-primary">SUBMIT</button>
+    </form>
+    {% else %}
+    <h1>You are not permitted ⛔</h1>
+    {% endif %}
   </div>
 {% endblock body %}

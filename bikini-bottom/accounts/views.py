@@ -40,4 +40,4 @@ def ProfileUpdateView(request, pk):
       item.user = request.user
       form.save()
       return redirect('profile')
-  return render(request, 'accounts/profile_update.html', {'form': form})
+  return render(request, 'accounts/profile_update.html', {'form': form, 'page': item})
