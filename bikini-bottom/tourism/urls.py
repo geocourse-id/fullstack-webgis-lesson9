@@ -4,11 +4,6 @@ from tourism import views
 urlpatterns = [
   # HOME PAGE
   path('', views.HomeView, name='home'),
-  
-  # PROFILE PAGE
-  path('profile/', views.ProfileView, name='profile'),
-  path('profile/add/', views.ProfileAddView, name='profile_add'),
-  path('profile/update/<int:pk>/', views.ProfileUpdateView, name='profile_update'),
 
   # BOOKING PAGE
   path('booking/', views.BookingView, name='booking'),

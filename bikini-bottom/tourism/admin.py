@@ -1,5 +1,5 @@
 from django.contrib.gis import admin
-from .models import Facility, Booking, Review, Profile, LineInfrastructure, Complaint, District
+from .models import Facility, Booking, Review, LineInfrastructure, Complaint, District
 
 class LocationAdmin(admin.OSMGeoAdmin):
   default_zoom = 11
@@ -18,6 +18,5 @@ class ComplaintAdmin(LocationAdmin):
 
 admin.site.register(Booking)
 admin.site.register(Review)
-admin.site.register(Profile)
 admin.site.register(LineInfrastructure, LocationAdmin)
 admin.site.register(District, LocationAdmin)

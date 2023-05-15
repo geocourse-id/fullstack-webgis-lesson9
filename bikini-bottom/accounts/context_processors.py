@@ -1,4 +1,4 @@
-from tourism.models import Profile
+from accounts.models import Profile
 
 def profile(request):
   if request.user.is_authenticated:

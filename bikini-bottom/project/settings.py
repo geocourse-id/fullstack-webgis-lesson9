@@ -58,7 +58,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 # Custom Context Processor
-                'project.context_processors.profile',
+                'accounts.context_processors.profile',
             ],
         },
     },
@@ -135,3 +135,11 @@ LEAFLET_CONFIG = {
 # Crispy Forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# EMAIL SMTP
+EMAIL_BACKEND = secret.email['backend']
+EMAIL_HOST = secret.email['host']
+EMAIL_PORT = secret.email['port']
+EMAIL_HOST_USER = secret.email['user']
+EMAIL_HOST_PASSWORD = secret.email['password']
+EMAIL_USE_TLS = secret.email['tls']

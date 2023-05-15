@@ -11,6 +11,6 @@
       {{form | crispy}}
       <button type="submit" class="btn btn-outline-primary">LOGIN</button>
     </form>
-    <p>Forgot your password? Recover your account <a href="">here.</a></p>
+    <p>Forgot your password? Recover your account <a href="{% url 'password_reset' %}">here.</a></p>
   </div>
 {% endblock body %}

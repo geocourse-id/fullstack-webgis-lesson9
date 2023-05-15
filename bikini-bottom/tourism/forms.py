@@ -1,24 +1,7 @@
 from django import forms
-from .models import Profile, Booking, Facility, Complaint, Review
+from .models import Booking, Facility, Complaint, Review
 from django.contrib.admin import widgets
 from leaflet.forms.widgets import LeafletWidget
-
-class ProfileForm(forms.ModelForm):
-  class Meta:
-    model = Profile
-    fields = [
-      'birth_date',
-      'phone',
-      'address',
-      'nationality',
-      'avatar',
-      'user',
-    ]
-
-    widgets = {
-      'birth_date': forms.DateInput(attrs={'type': 'date'}),
-      'user': forms.TextInput(attrs={'hidden': True})
-    }
 
 class BookingForm(forms.ModelForm):
   start_visit = forms.SplitDateTimeField(widget=widgets.AdminSplitDateTime())
