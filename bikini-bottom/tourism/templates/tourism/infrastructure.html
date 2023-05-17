@@ -109,7 +109,57 @@
             );
           }
         });
-        const infrastructure = L.geoJSON.ajax("{% url 'geo_infrastructure' %}");
+        const infrastructure = L.geoJSON.ajax("{% url 'geo_infrastructure' %}", {
+          onEachFeature: function(feature, layer){
+            // Layer style
+            switch (feature.properties.types) {
+              case 'Highway':
+                layer.setStyle({color: 'maroon', weight: 7})
+                break;
+              case 'Main Road':
+                layer.setStyle({color: 'red', weight: 5})
+                break;
+              case 'Local Road':
+                layer.setStyle({color: 'black', weight: 3})
+                break;
+              case 'Residential Road':
+                layer.setStyle({color: 'black', weight: 1.5})
+                break;
+              case 'Inter-city Railway':
+                layer.setStyle({color: 'black', weight: 3, dashArray: '10, 10'})
+                break;
+              case 'Local Railway':
+                layer.setStyle({color: 'black', weight: 2, dashArray: '10, 10'})
+                break;
+              case 'Canal':
+                layer.setStyle({color: 'blue', weight: 2})
+                break;
+              case 'Sewer':
+                layer.setStyle({color: 'blue', weight: 2, dashArray: '10, 10'})
+                break;
+              case 'Power Line':
+                layer.setStyle({color: 'orange', weight: 2, dashArray: '10, 10'})
+                break;
+              case 'Water Pipeline':
+                layer.setStyle({color: 'cyan', weight: 2, dashArray: '10, 10'})
+                break;
+              case 'Telecom Line':
+                layer.setStyle({color: 'brown', weight: 2, dashArray: '10, 10'})
+                break;
+              default:
+                layer.setStyle({color: 'grey', weight: 1})
+                break;
+            };
+
+            // Layer popup
+            layer.bindPopup(
+              `
+                <b>${feature.properties.name}</b><br>
+                <span>${feature.properties.types}</span>
+              `
+            )
+          }
+        });
         
         // MAP VIEW
         complaint.addTo(map);
