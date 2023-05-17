@@ -16,6 +16,19 @@ class BookingForm(forms.ModelForm):
       'payment_method',
     ]
 
+class BookingCancelForm(forms.ModelForm):
+  class Meta:
+    model = Booking
+    fields = [
+      'payment_status',
+      'user'
+    ]
+
+    widgets = {
+      'payment_status': forms.TextInput(attrs={'readonly': True}),
+      'user': forms.TextInput(attrs={'hidden': True}),
+    }
+
 class FacilityProposeForm(forms.ModelForm):
   class Meta:
     model = Facility
@@ -46,6 +59,15 @@ class FacilityChangeForm(forms.ModelForm):
     widgets = {
       'status': forms.TextInput(attrs={'readonly': True}),
       'operator': forms.TextInput(attrs={'hidden': True})
+    }
+
+class FacilityBookedConfirmForm(forms.ModelForm):
+  class Meta:
+    model = Booking
+    fields = ['payment_status']
+
+    widgets = {
+      'payment_status': forms.TextInput(attrs={'readonly': True}),
     }
 
 class InfrastructureComplaintForm(forms.ModelForm):

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load leaflet_tags %}
+
+{% block title %}Booking Payment{% endblock title %}
+{% block head %}
+  {% leaflet_js plugins="forms" %}
+  {% leaflet_css plugins="forms" %}
+{% endblock head %}
+{% block body %}
+  <div class="container">
+{#    {% if form.user.value == request.user.id %} #}
+    <h1>CONFIRMATION BOOKING PAYMENT</h1>
+    <form action="" method="post" onsubmit="return confirm('Are you sure want to proceess the cancellation?')">
+      {% csrf_token %}
+      {{form | crispy}}
+      <button type="submit" name="payment" value="paid" class="btn btn-outline-success">PAID</button>
+      <button type="submit" name="payment" value="invalid" class="btn btn-outline-danger ms-2">INVALID</button>
+    </form>
+    {#{% else %}#}
+    <!-- <h1>You are not permitted ⛔</h1> -->
+    {#{% endif %}#}
+  </div>
+{% endblock body %}

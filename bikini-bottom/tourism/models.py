@@ -46,6 +46,9 @@ class Facility(models.Model):
     ('weekly', 'Weekly'),
     ('monthly', 'Monthly'),
     ('annual', 'Annual'),
+    ('pcs', 'Pcs'),
+    ('g', 'Gram'),
+    ('kg', 'Kilogram'),
   ]
 
   name = models.CharField(max_length=80)
@@ -75,6 +78,10 @@ class Booking(models.Model):
   PAYMENT_STATUS_CHOICES = [
     ('paid', 'Paid'),
     ('unpaid', 'Unpaid'),
+    ('cancel', 'Cancelled'),
+    ('refund', 'Refund'),
+    ('no refund', 'No Refund'),
+    ('invalid', 'Invalid'),
   ]
 
   facility = models.ForeignKey(Facility, on_delete=models.CASCADE)

@@ -15,7 +15,7 @@
     <a href="{% url 'booking_add' %}" class="btn btn-primary">Book a facility</a>
 
     <div class="row">
-      <div class="col-9">
+      <div class="col-9 table-responsive">
         <table class="table table-striped table-hover mt-2">
           <thead>
             <tr>
@@ -32,12 +32,28 @@
             {% for item in booking %}
             <tr>
               <th scope="row">{{forloop.counter}}</th>
-              <td><button class="btn p-0" onclick='inputFacility("{{item.id}}", "{{item.facility}}")'  >{{item.facility}}</button></td>
+              {% if item.payment_status == 'paid' %}
+              <td><button class="btn p-0 text-primary" onclick='inputFacility("{{item.id}}", "{{item.facility}}")'  ><u>{{item.facility}}</u></button></td>
+              {% else %}
+              <td>{{item.facility}}</td>
+              {% endif %}
               <td>{{item.start_visit}}</td>
               <td>{{item.end_visit}}</td>
-              <td>{{item.payment_method}}</td>
+              {% if item.payment_status in cancel_list %}
+                <td><a href="{% url 'booking_cancel' item.id %}" class="btn p-0 text-primary"><u>{{item.payment_method}}</u></a></td>
+              {% else %}
+                <td>{{item.payment_method}}</td>
+              {% endif %}
               {% if item.payment_status == 'paid' %}
                 <td><span class="badge text-bg-success">{{item.payment_status | upper}}</span></td>
+              {% elif item.payment_status == 'cancel' %}
+                <td><span class="badge text-bg-warning">{{item.payment_status | upper}}</span></td>
+              {% elif item.payment_status == 'refund' %}
+                <td><span class="badge text-bg-info">{{item.payment_status | upper}}</span></td>
+              {% elif item.payment_status == 'no refund' %}
+                <td><span class="badge text-bg-dark">{{item.payment_status | upper}}</span></td>
+              {% elif item.payment_status == 'invalid' %}
+                <td><span class="badge text-bg-secondary">{{item.payment_status | upper}}</span></td>
               {% else %}
                 <td><span class="badge text-bg-danger">{{item.payment_status | upper}}</span></td>
               {% endif %}

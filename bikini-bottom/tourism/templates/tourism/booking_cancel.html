@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load leaflet_tags %}
+
+{% block title %}Booking Cancel{% endblock title %}
+{% block head %}
+  {% leaflet_js plugins="forms" %}
+  {% leaflet_css plugins="forms" %}
+{% endblock head %}
+{% block body %}
+  <div class="container">
+    {% if form.user.value == request.user.id %}
+    <h1>DO YOU WANT TO CANCEL BOOKING?</h1>
+    <form action="" method="post" onsubmit="return confirm('Are you sure want to cancel this booking?')">
+      {% csrf_token %}
+      {{form | crispy}}
+      <button type="submit" class="btn btn-outline-primary">CANCEL YOUR BOOKING</button>
+    </form>
+    {% else %}
+    <h1>You are not permitted ⛔</h1>
+    {% endif %}
+  </div>
+{% endblock body %}
