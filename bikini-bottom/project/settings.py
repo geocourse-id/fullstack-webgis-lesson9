@@ -9,6 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = secret.secure['key']
 DEBUG = secret.secure['debug']
 ALLOWED_HOSTS = secret.secure['host']
+CSRF_TRUSTED_ORIGINS = secret.secure['csrf_trusted']
 
 # APPS DEFINITION
 INSTALLED_APPS = [

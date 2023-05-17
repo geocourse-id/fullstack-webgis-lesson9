@@ -147,6 +147,7 @@ class Complaint(models.Model):
     ('damage', 'Infrastructure Damage'),
     ('malfunction', 'Malfunction Service'),
     ('vandalism', 'Vandalism'),
+    ('crime', 'Crime'),
   ]
 
   STATUS_HANDLING_CHOICES = [

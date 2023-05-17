@@ -64,48 +64,159 @@
           data !== null ? scoreReview = Number(data.getAttribute('score')).toFixed(2) : scoreReview = 'No review'
           data !== null ? countReview = Number(data.getAttribute('count')) : countReview = 'No review'
 
-          layer.bindPopup(
-            `
-              <h4>${feature.properties.name}</h4>
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <td>Type</td>
-                    <td>${feature.properties.types}</td>
-                  </tr>
-                  <tr>
-                    <td>Status</td>
-                    <td>${feature.properties.status}</td>
-                  </tr>
-                  <tr>
-                    <td>Price</td>
-                    <td>${feature.properties.price}</td>
-                  </tr>
-                  <tr>
-                    <td>Price Unit</td>
-                    <td>${feature.properties.price_unit}</td>
-                  </tr>
-                  <tr>
-                    <td>Photo</td>
-                    <td><img src='/media/${feature.properties.photo}' style='width: 100px;' ></td>
-                  </tr>
-                  <tr>
-                    <td>Rating</td>
-                    <td>${scoreReview}</td>
-                  </tr>
-                  <tr>
-                    <td>Reviews</td>
-                    <td>${countReview}</td>
-                  </tr>
-                </tbody>
-              </table>
-            `
-          );
+          // setup icon display by types
+          if(feature.properties.status === 'complete'){
+
+            switch (feature.properties.types) {
+              case 'government':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/government.png'}))
+                break;
+              case 'public':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/public.png'}))
+                break;
+              case 'park':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/park.png'}))
+                break;
+              case 'cafe':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/cafe.png'}))
+                break;
+              case 'restaurant':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/restaurant.png'}))
+                break;
+              case 'parking':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/parking.png'}))
+                break;
+              case 'finance':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/finance.png'}))
+                break;
+              case 'cinema':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/cinema.png'}))
+                break;
+              case 'amusement':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/amusement.png'}))
+                break;
+              case 'shop':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/shop.png'}))
+                break;
+              case 'market':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/market.png'}))
+                break;
+              case 'worship':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/worship.png'}))
+                break;
+              case 'homestay':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/homestay.png'}))
+                break;
+              case 'hotel':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/hotel.png'}))
+                break;
+              case 'house':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/house.png'}))
+                break;
+              case 'apartment':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/apartment.png'}))
+                break;
+              case 'office':
+                layer.setIcon(L.icon({iconUrl: '/media/icon/office.png'}))
+                break;
+            };
+
+            // Binding popup in layer click
+            layer.bindPopup(
+              `
+                <h4>${feature.properties.name}</h4>
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <td>Type</td>
+                      <td>${feature.properties.types}</td>
+                    </tr>
+                    <tr>
+                      <td>Open</td>
+                      <td>${open}</td>
+                    </tr>
+                    <tr>
+                      <td>Price</td>
+                      <td>${feature.properties.price}</td>
+                    </tr>
+                    <tr>
+                      <td>Price Unit</td>
+                      <td>${feature.properties.price_unit}</td>
+                    </tr>
+                    <tr>
+                      <td>Photo</td>
+                      <td><img src='/media/${feature.properties.photo}' style='width: 100px;' ></td>
+                    </tr>
+                    <tr>
+                      <td>Rating</td>
+                      <td>${scoreReview}</td>
+                    </tr>
+                    <tr>
+                      <td>Reviews</td>
+                      <td>${countReview}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              `
+            );
+          }
+
+          // if status is not 'complete' 
+          else{
+            layer.setIcon(L.icon({iconUrl: '/media/icon/market.png', iconSize: [0, 0]}))
+            layer.bindPopup(
+              `
+                <h6>${feature.properties.name}</h6>
+                <b>Status:</b> <span>${feature.properties.status.toUpperCase()}</span>
+              `
+            );
+          };
         }
       });
 
       const infrastructure = L.geoJSON.ajax("{% url 'geo_infrastructure' %}", {
         onEachFeature: function(feature, layer){
+          // Layer style
+          switch (feature.properties.types) {
+            case 'Highway':
+              layer.setStyle({color: 'maroon', weight: 7})
+              break;
+            case 'Main Road':
+              layer.setStyle({color: 'red', weight: 5})
+              break;
+            case 'Local Road':
+              layer.setStyle({color: 'black', weight: 3})
+              break;
+            case 'Residential Road':
+              layer.setStyle({color: 'black', weight: 1.5})
+              break;
+            case 'Inter-city Railway':
+              layer.setStyle({color: 'black', weight: 3, dashArray: '10, 10'})
+              break;
+            case 'Local Railway':
+              layer.setStyle({color: 'black', weight: 2, dashArray: '10, 10'})
+              break;
+            case 'Canal':
+              layer.setStyle({color: 'blue', weight: 2})
+              break;
+            case 'Sewer':
+              layer.setStyle({color: 'blue', weight: 2, dashArray: '10, 10'})
+              break;
+            case 'Power Line':
+              layer.setStyle({color: 'orange', weight: 2, dashArray: '10, 10'})
+              break;
+            case 'Water Pipeline':
+              layer.setStyle({color: 'cyan', weight: 2, dashArray: '10, 10'})
+              break;
+            case 'Telecom Line':
+              layer.setStyle({color: 'brown', weight: 2, dashArray: '10, 10'})
+              break;
+            default:
+              layer.setStyle({color: 'grey', weight: 1})
+              break;
+          };
+
+          // Layer popup
           layer.bindPopup(
             `
               <a href=''><h4>${feature.properties.name}</h4></a>
@@ -128,6 +239,20 @@
 
       const district = L.geoJSON.ajax("{% url 'geo_district' %}", {
         onEachFeature: function(feature, layer){
+          // Set default color style
+          layer.setStyle({color: 'cyan'})
+
+          // Change color on hover in
+          layer.on('mouseover', function() {
+            layer.setStyle({color: 'yellow'});
+          });
+          
+          // Back to default on hover out
+          layer.on('mouseout', function() {
+            layer.setStyle({color: 'cyan'});
+          });
+
+          // Popup settings
           layer.bindPopup(
             `
               <a href=''><h4>${feature.properties.name}</h4></a>
