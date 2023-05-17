@@ -58,6 +58,11 @@
             document.getElementById('chosen-facility').value = facilityId
           })
 
+          // For open or close status
+          let open
+          feature.properties.open ? open = '✅' : open = '⛔'
+
+          // For review display
           const data = document.getElementById(`data-${feature.id}`)
           let scoreReview
           let countReview
