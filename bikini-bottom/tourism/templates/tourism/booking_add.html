@@ -271,8 +271,13 @@
 
       // Add feature to web map
       facility.addTo(map);
-      district.addTo(map);
       infrastructure.addTo(map);
+      district.addTo(map);
+
+      // Set Layer Z-Index
+      facility.setZIndex(19)
+      infrastructure.setZIndex(18);
+      district.setZIndex(17);
 
       // Grouping Layer Overlay
       const controlLayers = map.layerscontrol;
