@@ -7,6 +7,12 @@ class Register(forms.ModelForm):
     model = User
     fields = ['username', 'first_name', 'last_name', 'email']
 
+    widgets = {
+      'first_name': forms.TextInput(attrs={'required': True}),
+      'last_name': forms.TextInput(attrs={'required': True}),
+      'email': forms.TextInput(attrs={'required': True}),
+    }
+
   password = forms.CharField(label='Password', widget=forms.PasswordInput)
   re_password = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
 
