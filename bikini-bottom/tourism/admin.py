@@ -8,8 +8,8 @@ class LocationAdmin(admin.OSMGeoAdmin):
 
 @admin.register(Facility)
 class FacilityAdmin(LocationAdmin):
-  list_filter = ['name', 'status']
-  list_display = ['id', 'name', 'status']
+  list_filter = ['status', 'operator']
+  list_display = ['id', 'name', 'status', 'operator']
 
 @admin.register(Complaint)
 class ComplaintAdmin(LocationAdmin):
